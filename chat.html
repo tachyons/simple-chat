@@ -2,11 +2,103 @@
 <html>
 <head>
 	<title>Chat</title>
+	<link rel="stylesheet" href="css/bootstrap.min.css" />
+	<link rel="stylesheet" href="css/style.css" />
+	<link href="css/multi-select.css" media="screen" rel="stylesheet" type="text/css">
 	<script type="text/javascript" src="js/jquery.js"></script>
-	<script type="text/javascript" js="js/bootstrap.js"></script>
+	<script type="text/javascript" src="js/bootstrap.js"></script>
 	<script type="text/javascript" src="js/socket.js"></script>
+	<script src="js/jquery.multi-select.js" type="text/javascript"></script>
 </head>
 <body>
+	<div class="modal fade" id="username_modal">
+	  <div class="modal-dialog">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <h4 class="modal-title">Modal title</h4>
+	      </div>
+	      <div class="modal-body">
+				<div class="form-group">
+				    <label for="inputUsename" class="col-sm-2 control-label">User Name</label>
+				    <div class="col-sm-10">
+				     	<input type="text" class="form-control" id="inputUsername" placeholder="USername" required>
+				    </div>
+			  </div>
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-primary" id="continue_button">Continue</button>
+	      </div>
+	    </div><!-- /.modal-content -->
+	  </div><!-- /.modal-dialog -->
+	</div><!-- /.modal -->
+	<div class="container">
+		<!-- Nav tabs -->
+		<ul class="nav nav-tabs" role="tablist">
+		  <li class="active"><a href="#home" role="tab" data-toggle="tab">Main</a></li>
+		  <li><a href="#profile" role="tab" data-toggle="tab">User</a></li>
+		</ul>
 
+		<!-- Tab panes -->
+		<div class="container">
+			<div id="top" class="row clearfix">
+				<div class="tab-content col-md-9 column" >
+				 	<div class="tab-pane active" id="home">
+				  		<div class="chat_area">
+				 		</div>
+				  	</div>
+					<div class="tab-pane" id="profile">
+						<div class="chat_area" >
+				 		</div>
+					</div>
+				</div>
+				<div class="col-md-3 column">
+					<div id="user_list" class="well">
+						<h3>List of Users</h3>
+						<ul id="connected_users">
+						</ul>
+					</div>
+					<div class="row">
+						<!-- Button trigger modal -->
+						<button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">
+						  Launch custom group
+						</button>
+
+						<!-- Modal -->
+						<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+						  <div class="modal-dialog">
+						    <div class="modal-content">
+						      <div class="modal-header">
+						        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+						        <h4 class="modal-title" id="myModalLabel">Select Users</h4>
+						      </div>
+						      <div class="modal-body">
+						        <select multiple class="multi" id="sendto" name="my-select[]">
+						        	<option value='elem_1'>elem 1</option>
+								      <option value='elem_2'>elem 2</option>
+								      <option value='elem_3'>elem 3</option>
+								      <option value='elem_4'>elem 4</option>
+								</select>
+						      </div>
+						      <div class="modal-footer">
+						        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+						        <button type="button" class="btn btn-primary" id="create_chat_button">Create Chat</button>
+						      </div>
+						    </div>
+						  </div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row clearfix">
+				<div class="col-md-10 column">
+					<textarea id="post_input" class=".col-md-12"></textarea>
+				</div>
+				<div class="col-md-2 column">
+					 <button type="button" id="send" class="btn btn-primary btn-block">Send</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	
 </body>
 </html>

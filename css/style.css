@@ -1,0 +1,13 @@
+#top {
+}
+.message {
+	padding: 20px;
+}
+#post_input {
+	width: 100%;
+}
+.chat_area {
+	min-height: 400px;
+	max-height: 600px;
+	overflow: scroll;
+}
