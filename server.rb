@@ -9,14 +9,13 @@ EM.run {
     ws.onopen { |handshake|
       @clients << ws
       @user_list << handshake.path.sub!('/', '')
+      @name=handshake.path.sub!('/', '');
       puts "WebSocket connection open"
-      json={:message => "Hello Client, you connected",:user=>"admin",:users=>@user_list}.to_json
-      ws.send json
-      #ws.send "Hello Client, you connected"
       @clients.each do |socket|
-        json={:message => " #{handshake.path} Logged In",:user=>"admin",:users=>@user_list}.to_json
-        socket.send json
-        #socket.send " #{handshake.path} Logged In" 
+        user_list_array={:type=>"userlist",:date=>Time.new,:users=>@user_list}.to_json
+        socket.send user_list_array
+        username_array={:type=>"username",:date=>Time.new,:name=>@name}.to_json
+        socket.send username_array
       end
     }
 
@@ -31,17 +30,17 @@ EM.run {
 
     ws.onmessage { |msg|
       puts "Recieved message: #{msg}"
-      obj = JSON.parse(msg)
+      obj = JSON.parse(msg) 
       if obj['to']=="all"
         @clients.each do |socket|
-          json={:type=>"message",:message => obj['message'],:user=>obj['user'],:users=>@user_list}.to_json
+          json={:type=>"message",:date=>Time.new,:message => obj['message'],:name=>obj['user'],:users=>@user_list}.to_json
           socket.send json
           #socket.send msg
         end
       else
         obj['to'].each do |to_obj|
           socket=@clients[@user_list.index(to_obj)]
-          json={:type=>"message",:message => obj['message'],:user=>obj['user'],:users=>@user_list}.to_json
+          json={:type=>"message",:message => obj['message'],:name=>obj['user'],:users=>@user_list}.to_json
           socket.send json
         end
       end

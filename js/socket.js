@@ -23,25 +23,45 @@ $(document).ready(function(){
         
         //Message Receved
         websocket.onmessage = function(ev) {
-            var json =  jQuery.parseJSON(ev.data);
+            var msg =  jQuery.parseJSON(ev.data);
             var time,cur_time;
-            time=new Date($.now());
-            cur_time=time.getHours() + ":" + time.getMinutes() + ":" + time.getSeconds();
-            var message="<div class=\"message well\"><p>"+json.message+"</p> <p class=\"pull-right\">"+json.user+"</p>    <li><span><i class=\"glyphicon glyphicon-calendar\"></i> "+cur_time+" </span></li></div>";
-            $('.chat_area').append(message);
-            //alert(message);
-            $('#connected_users').text("")
-            $('#sendto')
-                .empty()
-                //.append('<option selected="selected" value="all">All</option>')
-            ;
-            for (index = 0; index < json.users.length; ++index) {
-                $('#connected_users').append("<li>"+json.users[index]+"</li>");
-                $("#sendto").append('<option value='+json.users[index]+'>'+json.users[index]+'</option>');
-                $('#sendto').multiSelect('refresh');                
+            var time = new Date(msg.date);
+            var timeStr = time.toLocaleTimeString();
+            //time=new Date($.now());
+            var text="";
+            switch(msg.type) {
+                case "id":
+                    clientID = msg.id;
+                    setUsername();
+                    break;
+                case "username":
+                    text = "<b>User <em>" + msg.name + "</em> signed in at " + timeStr + "</b><br>";
+                    break;
+                case "message":
+                    text = "(" + timeStr + ") <b>" + msg.name + "</b>: " + msg.message + "<br>";
+                    break;
+                case "rejectusername":
+                    text = "<b>Your username has been set to <em>" + msg.name + "</em> because the name you chose is in use.</b><br>"
+                    break;
+                case "userlist":
+                    $('#connected_users').text("");
+                    $('#sendto').empty();
+                    for (i=0; i < msg.users.length; i++) {
+                        //ul += msg.users[i] + "<br>";
+                        $('#connected_users').append("<li>"+msg.users[i]+"</li>");
+                        $("#sendto").append('<option value='+msg.users[i]+'>'+msg.users[i]+'</option>');
+                    }
+                    $('#sendto').multiSelect('refresh');
+                     break;
+                case "newgroup":
+                    break;
             }
+            if (text.length) {
+                $('.chat_area').append(text);
+            }
+            
             $('#sendto').multiSelect()
-            //alert('Message '+ev.data);
+            
         };
         
         //Error
