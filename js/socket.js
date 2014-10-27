@@ -1,6 +1,9 @@
 $(document).ready(function(){
     $('#username_modal').modal('show');
     var reciever="all"
+    var recievers=[]
+    var id_num=0;
+    recievers[0]="all"
     $('#continue_button').click(function() {
         var username=$('#inputUsername').val();
         $('#username_modal').modal('toggle');
@@ -62,8 +65,48 @@ $(document).ready(function(){
             var selected_users=$( "#sendto" ).val();
             alert(selected_users);
             $('#myModal').modal('hide');
+
+            var id = $(".nav-tabs").children().length;
+            recievers[id]=selected_users;
+            var tabId = 'chat_' + id;
+            $('#all').closest('li').before('<li id="chat_li_'+id+'"><a id="chat_li_'+id+'" href="#chat_' + id + '">'+id+'</a> <span> x </span></li>');
+            $('.tab-content').append('<div class="tab-pane" id="' + tabId + '"> Members: ' + recievers[id] + '<div class="chat_area" id="chat_area_'+id+'" ></div>'+'</div>');
+            $('.nav-tabs li:nth-child(' + id + ') a').click();
+
+        });
+        $(".nav-tabs").on("click", "a", function (e) {
+            e.preventDefault();
+            //alert(e.toSource())
+            var id=$(this).tab().parent().attr('id')
+            if(id!="all") {
+                id_num=parseInt(id.replace("chat_li_", ""));
+                reciever=recievers[id_num];
+            }
+            else
+            {
+                reciever="all"
+            }
+            if (!$(this).hasClass('add-contact')) {
+                $(this).tab('show');
+            }
+        })
+        .on("click", "span", function () {
+            var anchor = $(this).siblings('a');
+            $(anchor.attr('href')).remove();
+            $(this).parent().remove();
+            $(".nav-tabs li").children('a').first().click();
         });
 
+        $('.add-contact').click(function (e) {
+            e.preventDefault();
+            var id = $(".nav-tabs").children().length; //think about it ;)
+            var tabId = 'contact_' + id;
+            $(this).closest('li').before('<li><a href="#contact_' + id + '">New Tab</a> <span> x </span></li>');
+            $('.tab-content').append('<div class="tab-pane" id="' + tabId + '">Contact Form: New Contact ' + id + '</div>');
+           $('.nav-tabs li:nth-child(' + id + ') a').click();
+        });
         //$('#sendto').multiSelect()
     });
 });
+
+

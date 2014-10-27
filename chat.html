@@ -34,8 +34,9 @@
 	<div class="container">
 		<!-- Nav tabs -->
 		<ul class="nav nav-tabs" role="tablist">
-		  <li class="active"><a href="#home" role="tab" data-toggle="tab">Main</a></li>
-		  <li><a href="#profile" role="tab" data-toggle="tab">User</a></li>
+		  <li class="active" id="all"><a href="#home" role="tab" data-toggle="tab"><button class="close closeTab" type="button" ></button>Main</a><span>&times;</span></li>
+		  <!-- <li><a href="#" class="add-contact">+ Add Contact</a> -->
+        </li>
 		</ul>
 
 		<!-- Tab panes -->
@@ -43,11 +44,11 @@
 			<div id="top" class="row clearfix">
 				<div class="tab-content col-md-9 column" >
 				 	<div class="tab-pane active" id="home">
-				  		<div class="chat_area">
+				  		<div class="chat_area" id="chatroom">
 				 		</div>
 				  	</div>
 					<div class="tab-pane" id="profile">
-						<div class="chat_area" >
+						<div class="chat_area"  >
 				 		</div>
 					</div>
 				</div>
