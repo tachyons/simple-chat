@@ -1,6 +1,6 @@
 $(document).ready(function(){
     $('#username_modal').modal('show');
-    var reciever="all"
+    var group="all"
     var recievers=[]
     var id_num=0;
     recievers[0]="all"
@@ -38,7 +38,12 @@ $(document).ready(function(){
                     text = "<b>User <em>" + msg.name + "</em> signed in at " + timeStr + "</b><br>";
                     break;
                 case "message":
-                    text = "(" + timeStr + ") <b>" + msg.name + "</b>: " + msg.message + "<br>";
+                    msg_text = "(" + timeStr + ") <b>" + msg.name + "</b>: " + msg.message + "<br>";
+                    if(msg.group=="all"){
+                        $("#chatroom").append(msg_text);
+                    } else {
+                        $("#chat_area_"+msg.group).append(msg_text);
+                    }
                     break;
                 case "rejectusername":
                     text = "<b>Your username has been set to <em>" + msg.name + "</em> because the name you chose is in use.</b><br>"
@@ -54,7 +59,14 @@ $(document).ready(function(){
                     $('#sendto').multiSelect('refresh');
                      break;
                 case "newgroup":
-                    break;
+                    //var id = $(".nav-tabs").children().length;
+                    var id=msg.id;
+                    //alert(msg.id);
+                    var tabId = 'chat_' + id;
+                    $('#all').closest('li').before('<li id="chat_li_'+id+'"><a id="chat_li_'+id+'" href="#chat_' + id + '">'+id+'</a> <span> x </span></li>');
+                    $('.tab-content').append('<div class="tab-pane" id="' + tabId + '"> Members: ' + msg.members + '<div class="chat_area" id="chat_area_'+id+'" ></div>'+'</div>');
+                    $('.nav-tabs li:nth-child(' + id + ') a').click();
+                break;
             }
             if (text.length) {
                 $('.chat_area').append(text);
@@ -74,7 +86,8 @@ $(document).ready(function(){
             var mymessage = $('#post_input').val();
             $('#post_input').val('');
             //websocket.send(JSON.stringify('user_message', {name: 'UserName', message: mymessage}) );
-            var msg=JSON.stringify({ message: mymessage,user: username ,to:reciever}); 
+            var msg_array={ type:"message",message: mymessage,user: username ,group:group};
+            var msg=JSON.stringify(msg_array); 
             websocket.send(msg);
         });
         $( "#sendto" ).change(function() {
@@ -86,12 +99,15 @@ $(document).ready(function(){
             alert(selected_users);
             $('#myModal').modal('hide');
 
-            var id = $(".nav-tabs").children().length;
+            /*var id = $(".nav-tabs").children().length;
             recievers[id]=selected_users;
             var tabId = 'chat_' + id;
             $('#all').closest('li').before('<li id="chat_li_'+id+'"><a id="chat_li_'+id+'" href="#chat_' + id + '">'+id+'</a> <span> x </span></li>');
             $('.tab-content').append('<div class="tab-pane" id="' + tabId + '"> Members: ' + recievers[id] + '<div class="chat_area" id="chat_area_'+id+'" ></div>'+'</div>');
-            $('.nav-tabs li:nth-child(' + id + ') a').click();
+            $('.nav-tabs li:nth-child(' + id + ') a').click();*/
+            var msg_array={ type:"newgroup",user: username ,members:selected_users};
+            var msg=JSON.stringify(msg_array); 
+            websocket.send(msg);
 
         });
         $(".nav-tabs").on("click", "a", function (e) {
@@ -100,11 +116,11 @@ $(document).ready(function(){
             var id=$(this).tab().parent().attr('id')
             if(id!="all") {
                 id_num=parseInt(id.replace("chat_li_", ""));
-                reciever=recievers[id_num];
+                group=id_num;
             }
             else
             {
-                reciever="all"
+                group="all";
             }
             if (!$(this).hasClass('add-contact')) {
                 $(this).tab('show');
