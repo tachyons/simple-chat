@@ -9,8 +9,9 @@ EM.run {
   EM::WebSocket.run(:host => "0.0.0.0", :port => 8080 ,:debug => true) do |ws|
     ws.onopen { |handshake|
       @clients << ws
-      @user_list << handshake.path.sub!('/', '')
       @name=handshake.path.sub!('/', '');
+      @user_list << @name;
+      #@name=handshake.path.sub!('/', '');
       puts "WebSocket connection open"
       @clients.each do |socket|
         user_list_array={:type=>"userlist",:date=>Time.new,:users=>@user_list}.to_json
