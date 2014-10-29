@@ -1,30 +1,50 @@
 #top {
+	min-height: 500px;
 }
 .message {
 	padding: 20px;
 }
 #post_input {
-	width: 100%;
+	width: 85%;
+    height:70px;
+}
+#post {
+    width:15%;
+}
+#send {
+    width:14%;
+    margin-bottom: 60px;
 }
 .chat_area {
-	min-height: 400px;
-	max-height: 600px;
+	min-height: 500px;
+	max-height: 500px;
 	overflow: scroll;
+	padding: 10px;
+
 }
 .nav-tabs > li {
     position:relative;
 }
 .nav-tabs > li > a {
     display:inline-block;
+    padding-right: 30px;
 }
 .nav-tabs > li > span {
-    display:none;
-    cursor:pointer;
-    position:absolute;
-    right: 6px;
-    top: 8px;
+    /*display: none; */
+    visibility: hidden;
+    cursor: pointer;
+    position: relative;
+    /*right: 0px;*/
+    left: -26px;
+    font-size: 20px;
+    top: -5px;
     color: red;
 }
 .nav-tabs > li:hover > span {
     display: inline-block;
+    visibility: visible;
+}
+#status_section {
+    padding-top: 20px;
+    padding-bottom: 20px;
 }

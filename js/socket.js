@@ -7,18 +7,20 @@ $(document).ready(function(){
     $('#continue_button').click(function() {
         var username=$('#inputUsername').val();
         $('#username_modal').modal('toggle');
-        alert(username);
+        //alert(username);
         //Open a WebSocket connection.
         var wsUri = "ws://192.168.1.211:8080/"+username;   
         websocket = new WebSocket(wsUri); 
         //Connected to server
         websocket.onopen = function(ev) {
-            alert('Connected to server ');
+            //alert('Connected to server ');
+            $('#status').text('Connected to server ')
         }
         
         //Connection close
         websocket.onclose = function(ev) { 
-            alert('Disconnected');
+            //alert('Disconnected');
+            $('#status').text('Connected to server ')
         };
         
         //Message Receved
@@ -63,7 +65,7 @@ $(document).ready(function(){
                     var id=msg.id;
                     //alert(msg.id);
                     var tabId = 'chat_' + id;
-                    $('#all').closest('li').before('<li id="chat_li_'+id+'"><a id="chat_li_'+id+'" href="#chat_' + id + '">'+id+'</a> <span> x </span></li>');
+                    $('#all').closest('li').before('<li id="chat_li_'+id+'"><a id="chat_li_'+id+'" href="#chat_' + id + '">Group:'+id+'</a> <span> &times; </span></li>');
                     $('.tab-content').append('<div class="tab-pane" id="' + tabId + '"> Members: ' + msg.members + '<div class="chat_area" id="chat_area_'+id+'" ></div>'+'</div>');
                     $('.nav-tabs li:nth-child(' + id + ') a').click();
                 break;
@@ -96,7 +98,7 @@ $(document).ready(function(){
         });
         $('#create_chat_button').click(function(){
             var selected_users=$( "#sendto" ).val();
-            alert(selected_users);
+            //alert(selected_users);
             $('#myModal').modal('hide');
 
             /*var id = $(".nav-tabs").children().length;
@@ -133,14 +135,14 @@ $(document).ready(function(){
             $(".nav-tabs li").children('a').first().click();
         });
 
-        $('.add-contact').click(function (e) {
-            e.preventDefault();
-            var id = $(".nav-tabs").children().length; //think about it ;)
-            var tabId = 'contact_' + id;
-            $(this).closest('li').before('<li><a href="#contact_' + id + '">New Tab</a> <span> x </span></li>');
-            $('.tab-content').append('<div class="tab-pane" id="' + tabId + '">Contact Form: New Contact ' + id + '</div>');
-           $('.nav-tabs li:nth-child(' + id + ') a').click();
-        });
+        // $('.add-contact').click(function (e) {
+        //     e.preventDefault();
+        //     var id = $(".nav-tabs").children().length; //think about it ;)
+        //     var tabId = 'contact_' + id;
+        //     $(this).closest('li').before('<li><a href="#contact_' + id + '">New Tab</a> <span> x </span></li>');
+        //     $('.tab-content').append('<div class="tab-pane" id="' + tabId + '">Contact Form: New Contact ' + id + '</div>');
+        //    $('.nav-tabs li:nth-child(' + id + ') a').click();
+        // });
         //$('#sendto').multiSelect()
     });
 });
